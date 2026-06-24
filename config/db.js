@@ -2,7 +2,7 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 
 //i dont know if it an issue with my wifi, but it will not let me connect unless i use the non srv connection string. i have had the same issue on assignment 2
-//also not using a .env file for the sake of time as i am making this submission private on github
+//also not using a .env file for the sake of time as i am making this submission private on github until launch, added diff user for testing
 let ConnectionString = "mongodb://user:Testing123456@ac-nkvndxw-shard-00-00.pjptmar.mongodb.net:27017,ac-nkvndxw-shard-00-01.pjptmar.mongodb.net:27017,ac-nkvndxw-shard-00-02.pjptmar.mongodb.net:27017/Midterm?ssl=true&replicaSet=atlas-sx2z9m-shard-0&authSource=admin&appName=Portfolio"
 
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
