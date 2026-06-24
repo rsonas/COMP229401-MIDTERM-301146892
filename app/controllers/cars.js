@@ -99,6 +99,7 @@ module.exports.update = async function (req, res, next) {
       );
     }
 
+    //clarification: kept sending same message stating car did not exist, so i divided it into two messages
     //checks if car id exists
     if (result.matchedCount === 0) {
       return res.status(200).json({
