@@ -5,8 +5,25 @@ module.exports.getCar = async function (req, res, next) {
     // Find one using the id sent in the parameter of the request
     let car = await CarModel.findOne({ _id: req.params.id });
 
+    //no failiure message 
+    if (!car) {
+      return res.status(404).json({
+        success: false,
+        message: "Car not found.",
+        data: null
+      });
+    }
+
     // Set the response status
     res.status(200);
+
+    res.json(
+      {
+        success: true,
+        message: "Car retrieved successfully",
+        data: car
+      }
+    );
 
 
   } catch (error) {
@@ -64,14 +81,11 @@ module.exports.getAll = async function (req, res, next) {
 
 module.exports.update = async function (req, res, next) {
   try {
-    // Create a car object from the request body
-    let updatedCar = CarModel(req.body);
-    
-    // Change the _id to use the one received in the request parameters.
-    updatedCar._id = req.params.id;
+    //removed two lines that modified the id whih postman would not allow
+    delete req.body._id;
 
     // Submit the change
-    let result = await CarModel.updateOne();
+    let result = await CarModel.updateOne( {_id: req.params.id}, req.body); //left blank
     console.log("Result: " + result);
 
     // Handle the result: send a response.
@@ -83,8 +97,22 @@ module.exports.update = async function (req, res, next) {
           message: "Car updated successfully."
         }
       );
-    } else {
-      throw new Error('Car not updated. Are you sure it exists?')
+    }
+
+    //checks if car id exists
+    if (result.matchedCount === 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Car not updated. Are you sure it exists?"
+      });
+    }
+
+    //checks if chhanges have been made, if not returns diff message
+    if (result.modifiedCount === 0 ) {
+      return res.status(200).json({
+        success: true,
+        mesage: "data up to date, no changes made"
+      });
     }
 
   } catch (error) {
@@ -97,7 +125,7 @@ module.exports.update = async function (req, res, next) {
 module.exports.remove = async function (req, res, next) {
   try {
     // Delete  using the id received in the parameter of the request
-    let result = await CarModel.deleteOne({ _id: req.params.carId });
+    let result = await CarModel.deleteOne({ _id: req.params.id }); //wrong id name
     console.log("Result: " + result);
 
     // Handle the result and send a response
